@@ -53,4 +53,10 @@ const teamSchema = new mongoose.Schema({
   },
 });
 
+teamSchema.virtual("goalDifference").get(function () {
+  return this.goalsFor - this.goalsAgainst;
+});
+teamSchema.set("toJSON", { virtuals: true });
+teamSchema.set("toObject", { virtuals: true });
+
 module.exports = mongoose.model("Team", teamSchema);

@@ -3,6 +3,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
+const tournamentRoutes = require("./routes/tournamentRoutes");
 const matchRoutes = require("./routes/matchRoutes");
 const teamRoutes = require("./routes/teamRoutes");
 
@@ -19,6 +20,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+app.use("/", tournamentRoutes);
 app.use("/matches", matchRoutes);
 app.use("/teams", teamRoutes);
 

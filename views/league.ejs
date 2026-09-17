@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>League Table - UCL Simulator</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="container">
+    <h1 class="page-title">Swiss System League Table</h1>
+
+    <div class="actions-bar">
+      <form action="/simulate-all" method="POST">
+        <button type="submit" class="btn btn-accent">Simulate Entire Season</button>
+      </form>
+      <form action="/start-season" method="POST">
+        <button type="submit" class="btn">Reset & Start New Season</button>
+      </form>
+    </div>
+
+    <div class="table-container">
+      <table class="league-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Team</th>
+            <th>Country</th>
+            <th>MP</th>
+            <th>W</th>
+            <th>D</th>
+            <th>L</th>
+            <th>GF</th>
+            <th>GA</th>
+            <th>GD</th>
+            <th>Pts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% teams.forEach((team, index) => { %>
+            <% 
+              let zoneClass = '';
+              if (index < 8) zoneClass = 'zone-direct';
+              else if (index < 24) zoneClass = 'zone-playoff';
+              else zoneClass = 'zone-eliminated';
+            %>
+            <tr class="<%= zoneClass %>">
+              <td><strong><%= index + 1 %></strong></td>
+              <td><strong><%= team.name %></strong></td>
+              <td><%= team.country %></td>
+              <td><%= team.played %></td>
+              <td><%= team.wins %></td>
+              <td><%= team.draws %></td>
+              <td><%= team.losses %></td>
+              <td><%= team.goalsFor %></td>
+              <td><%= team.goalsAgainst %></td>
+              <td><%= team.goalsFor - team.goalsAgainst %></td>
+              <td><strong><%= team.points %></strong></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

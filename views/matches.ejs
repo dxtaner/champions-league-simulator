@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match Fixtures - UCL Simulator</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="container">
+    <h1 class="page-title">Matchday <%= currentMatchday %> Fixtures</h1>
+
+    <div class="matchday-nav">
+      <% for (let i = 1; i <= 8; i++) { %>
+        <a href="/matches/<%= i %>" class="<%= currentMatchday === i ? 'active' : '' %>">
+          Matchday <%= i %>
+        </a>
+      <% } %>
+    </div>
+
+    <div class="actions-bar">
+      <form action="/matches/simulate/<%= currentMatchday %>" method="POST">
+        <button type="submit" class="btn btn-accent">Simulate Matchday</button>
+      </form>
+    </div>
+
+    <div class="matches-grid">
+      <% matches.forEach(match => { %>
+        <div class="match-card">
+          <div class="team-name home"><%= match.homeTeam ? match.homeTeam.name : 'TBD' %></div>
+          <div class="score-box">
+            <% if (match.played) { %>
+              <%= match.homeScore %> - <%= match.awayScore %>
+            <% } else { %>
+              vs
+            <% } %>
+          </div>
+          <div class="team-name away"><%= match.awayTeam ? match.awayTeam.name : 'TBD' %></div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</body>
+</html>

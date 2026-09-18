@@ -1,3 +1,14 @@
+:root {
+  --ucl-bg: #0b0e1e;
+  --ucl-card: #141a33;
+  --ucl-card-border: #202b54;
+  --ucl-primary: #001035;
+  --ucl-accent: #f0c342;
+  --ucl-text: #ffffff;
+  --ucl-text-muted: #a0aabf;
+  --ucl-hover: #1d274d;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,64 +16,213 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--ucl-bg);
+  color: var(--ucl-text);
+  line-height: 1.6;
 }
 
-header {
-  padding: 20px 8%;
-  background: #020617;
+/* Navbar */
+.navbar {
+  background: linear-gradient(135deg, #040817 0%, #0d1536 100%);
+  border-bottom: 2px solid var(--ucl-accent);
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
 
+.navbar .logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.navbar .logo span {
+  color: var(--ucl-accent);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: var(--ucl-text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--ucl-accent);
+}
+
+/* Main Layout */
+.container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 25px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(240, 195, 66, 0.2);
+}
+
+/* Buttons */
+.btn {
+  background: linear-gradient(135deg, #1f3775 0%, #0e204c 100%);
+  color: #fff;
+  border: 1px solid var(--ucl-accent);
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--ucl-accent);
+  color: var(--ucl-primary);
+  box-shadow: 0 0 12px rgba(240, 195, 66, 0.4);
+}
+
+.btn-accent {
+  background: var(--ucl-accent);
+  color: var(--ucl-primary);
+}
+
+.btn-accent:hover {
+  background: #ffd65c;
+}
+
+.actions-bar {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+/* Table */
+.table-container {
+  background-color: var(--ucl-card);
+  border: 1px solid var(--ucl-card-border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.league-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.league-table th,
+.league-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ucl-card-border);
+}
+
+.league-table th {
+  background-color: var(--ucl-primary);
+  color: var(--ucl-accent);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.league-table tbody tr:hover {
+  background-color: var(--ucl-hover);
+}
+
+/* Zone Highlights */
+.zone-direct {
+  border-left: 4px solid #28a745;
+}
+
+.zone-playoff {
+  border-left: 4px solid #ffc107;
+}
+
+.zone-eliminated {
+  border-left: 4px solid #dc3545;
+}
+
+/* Matches Grid */
+.matchday-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.matchday-nav a {
+  padding: 6px 14px;
+  background-color: var(--ucl-card);
+  border: 1px solid var(--ucl-card-border);
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.matchday-nav a.active {
+  background-color: var(--ucl-accent);
+  color: var(--ucl-primary);
+  font-weight: 700;
+}
+
+.matches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.match-card {
+  background-color: var(--ucl-card);
+  border: 1px solid var(--ucl-card-border);
+  border-radius: 8px;
+  padding: 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-nav {
-  display: flex;
-  gap: 20px;
+.team-name {
+  font-weight: 600;
+  width: 40%;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
+.team-name.home {
+  text-align: right;
+}
+.team-name.away {
+  text-align: left;
 }
 
-.hero {
-  min-height: 80vh;
-
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
-  align-items: center;
-
+.score-box {
+  background-color: var(--ucl-primary);
+  border: 1px solid var(--ucl-accent);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  min-width: 60px;
   text-align: center;
-}
-
-.hero h2 {
-  font-size: 48px;
-  margin-bottom: 20px;
-}
-
-.hero p {
-  font-size: 20px;
-  margin-bottom: 30px;
-}
-
-.buttons {
-  display: flex;
-  gap: 15px;
-}
-
-button {
-  padding: 14px 25px;
-
-  border: none;
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  font-size: 16px;
+  color: var(--ucl-accent);
 }

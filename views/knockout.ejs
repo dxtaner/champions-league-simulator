@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Knockout Stage - UCL Simulator</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      .knockout-section {
+        margin-bottom: 40px;
+      }
+      .section-title {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--ucl-card-border);
+        color: var(--ucl-accent);
+      }
+      .grid-teams {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 15px;
+      }
+      .team-badge-card {
+        background-color: var(--ucl-card);
+        border: 1px solid var(--ucl-card-border);
+        border-radius: 6px;
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .team-badge-card .rank {
+        background-color: var(--ucl-primary);
+        color: var(--ucl-accent);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+      .match-card-knockout {
+        background-color: var(--ucl-card);
+        border: 1px solid var(--ucl-card-border);
+        border-radius: 8px;
+        padding: 12px 18px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .winner-highlight {
+        color: var(--ucl-accent);
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
+
+    <div class="container">
+      <h1 class="page-title">Knockout Stage</h1>
+
+      <% if (!isSeasonStarted) { %>
+      <div
+        style="
+          background-color: var(--ucl-card);
+          border: 1px solid var(--ucl-card-border);
+          padding: 40px;
+          border-radius: 8px;
+          text-align: center;
+        "
+      >
+        <p
+          style="
+            color: var(--ucl-text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+          "
+        >
+          No matches have been played yet. Simulate league matches to view knockout stage fixtures.
+        </p>
+        <a href="/league" class="btn btn-accent">Go to League Table</a>
+      </div>
+      <% } else { %>
+
+      <!-- DIRECT QUALIFIERS SECTION -->
+      <div class="knockout-section">
+        <h2 class="section-title">
+          ⭐ Directly Qualified for Round of 16 (Ranks 1-8)
+        </h2>
+        <div class="grid-teams">
+          <% directQualified.forEach((team, index) => { %>
+          <div
+            class="team-badge-card"
+            style="border-left: 4px solid #28a745;"
+          >
+            <div>
+              <strong><%= team.name %></strong>
+              <div style="font-size: 0.8rem; color: var(--ucl-text-muted);">
+                <%= team.points %> Pts | <%= team.goalsFor - team.goalsAgainst %> GD
+              </div>
+            </div>
+            <span class="rank">#<%= index + 1 %></span>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- PLAY-OFF SECTION -->
+      <div class="knockout-section">
+        <h2 class="section-title">⚔️ Play-off Round (Ranks 9-24)</h2>
+
+        <div class="actions-bar" style="justify-content: flex-start;">
+          <% if (playoffMatches.length === 0) { %>
+          <form action="/knockout/generate-playoffs" method="POST">
+            <button type="submit" class="btn btn-accent">
+              Generate Play-off Fixtures
+            </button>
+          </form>
+          <% } else { %>
+          <form action="/knockout/simulate-stage" method="POST">
+            <input type="hidden" name="stage" value="PLAYOFF" />
+            <button type="submit" class="btn btn-accent">
+              Simulate Play-off Matches
+            </button>
+          </form>
+          <% } %>
+        </div>
+
+        <div class="matches-grid">
+          <% playoffMatches.forEach(match => { %>
+          <div class="match-card-knockout">
+            <div style="width: 40%; text-align: right;">
+              <span
+                class="<%= match.winner && match.winner._id.toString() === match.homeTeam._id.toString() ? 'winner-highlight' : '' %>"
+              >
+                <%= match.homeTeam.name %>
+              </span>
+            </div>
+            <div class="score-box">
+              <% if (match.played) { %> <%= match.homeScore %> - <%= match.awayScore %>
+              <% if (match.penaltyHome !== null) { %>
+              <div style="font-size: 0.75rem;">
+                (Pen: <%= match.penaltyHome %>-<%= match.penaltyAway %>)
+              </div>
+              <% } %> <% } else { %> Leg <%= match.leg %> <% } %>
+            </div>
+            <div style="width: 40%; text-align: left;">
+              <span
+                class="<%= match.winner && match.winner._id.toString() === match.awayTeam._id.toString() ? 'winner-highlight' : '' %>"
+              >
+                <%= match.awayTeam.name %>
+              </span>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- ROUND OF 16 SECTION -->
+      <div class="knockout-section">
+        <h2 class="section-title">🔥 Round of 16</h2>
+
+        <div class="actions-bar" style="justify-content: flex-start;">
+          <% if (roundOf16Matches.length === 0) { %>
+          <form action="/knockout/generate-round-of-16" method="POST">
+            <button type="submit" class="btn btn-accent">
+              Draw Round of 16
+            </button>
+          </form>
+          <% } else { %>
+          <form action="/knockout/simulate-stage" method="POST">
+            <input type="hidden" name="stage" value="ROUND_OF_16" />
+            <button type="submit" class="btn btn-accent">
+              Simulate Round of 16 Matches
+            </button>
+          </form>
+          <% } %>
+        </div>
+
+        <div class="matches-grid">
+          <% roundOf16Matches.forEach(match => { %>
+          <div class="match-card-knockout">
+            <div style="width: 40%; text-align: right;">
+              <span
+                class="<%= match.winner && match.winner._id.toString() === match.homeTeam._id.toString() ? 'winner-highlight' : '' %>"
+              >
+                <%= match.homeTeam.name %>
+              </span>
+            </div>
+            <div class="score-box">
+              <% if (match.played) { %> <%= match.homeScore %> - <%= match.awayScore %>
+              <% if (match.penaltyHome !== null) { %>
+              <div style="font-size: 0.75rem;">
+                (Pen: <%= match.penaltyHome %>-<%= match.penaltyAway %>)
+              </div>
+              <% } %> <% } else { %> Leg <%= match.leg %> <% } %>
+            </div>
+            <div style="width: 40%; text-align: left;">
+              <span
+                class="<%= match.winner && match.winner._id.toString() === match.awayTeam._id.toString() ? 'winner-highlight' : '' %>"
+              >
+                <%= match.awayTeam.name %>
+              </span>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- QUARTER-FINALS SECTION -->
+      <div class="knockout-section">
+        <h2 class="section-title">🏆 Quarter-Finals</h2>
+        <div class="actions-bar" style="justify-content: flex-start;">
+          <% if (quarterMatches.length === 0) { %>
+          <form action="/knockout/generate-quarter" method="POST">
+            <button type="submit" class="btn btn-accent">Draw Quarter-Finals</button>
+          </form>
+          <% } else { %>
+          <form action="/knockout/simulate-stage" method="POST">
+            <input type="hidden" name="stage" value="QUARTER_FINAL" />
+            <button type="submit" class="btn btn-accent">Simulate Quarter-Finals</button>
+          </form>
+          <% } %>
+        </div>
+        <div class="matches-grid">
+          <% quarterMatches.forEach(match => { %>
+          <div class="match-card-knockout">
+            <div style="width: 40%; text-align: right;">
+              <span class="<%= match.winner && match.winner._id.toString() === match.homeTeam._id.toString() ? 'winner-highlight' : '' %>">
+                <%= match.homeTeam.name %>
+              </span>
+            </div>
+            <div class="score-box">
+              <% if (match.played) { %> <%= match.homeScore %> - <%= match.awayScore %> <% } else { %> Leg <%= match.leg %> <% } %>
+            </div>
+            <div style="width: 40%; text-align: left;">
+              <span class="<%= match.winner && match.winner._id.toString() === match.awayTeam._id.toString() ? 'winner-highlight' : '' %>">
+                <%= match.awayTeam.name %>
+              </span>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- SEMI-FINALS SECTION -->
+      <div class="knockout-section">
+        <h2 class="section-title">✨ Semi-Finals</h2>
+        <div class="actions-bar" style="justify-content: flex-start;">
+          <% if (semiMatches.length === 0) { %>
+          <form action="/knockout/generate-semi" method="POST">
+            <button type="submit" class="btn btn-accent">Draw Semi-Finals</button>
+          </form>
+          <% } else { %>
+          <form action="/knockout/simulate-stage" method="POST">
+            <input type="hidden" name="stage" value="SEMI_FINAL" />
+            <button type="submit" class="btn btn-accent">Simulate Semi-Finals</button>
+          </form>
+          <% } %>
+        </div>
+        <div class="matches-grid">
+          <% semiMatches.forEach(match => { %>
+          <div class="match-card-knockout">
+            <div style="width: 40%; text-align: right;">
+              <span class="<%= match.winner && match.winner._id.toString() === match.homeTeam._id.toString() ? 'winner-highlight' : '' %>">
+                <%= match.homeTeam.name %>
+              </span>
+            </div>
+            <div class="score-box">
+              <% if (match.played) { %> <%= match.homeScore %> - <%= match.awayScore %> <% } else { %> Leg <%= match.leg %> <% } %>
+            </div>
+            <div style="width: 40%; text-align: left;">
+              <span class="<%= match.winner && match.winner._id.toString() === match.awayTeam._id.toString() ? 'winner-highlight' : '' %>">
+                <%= match.awayTeam.name %>
+              </span>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- FINAL SECTION -->
+      <div class="knockout-section">
+        <h2 class="section-title" style="color: #ffd700;">👑 Grand Final</h2>
+        <div class="actions-bar" style="justify-content: flex-start;">
+          <% if (!finalMatch) { %>
+          <form action="/knockout/generate-final" method="POST">
+            <button type="submit" class="btn btn-accent">Generate Final</button>
+          </form>
+          <% } else if (!finalMatch.played) { %>
+          <form action="/knockout/simulate-stage" method="POST">
+            <input type="hidden" name="stage" value="FINAL" />
+            <button type="submit" class="btn btn-accent">Simulate Final Match</button>
+          </form>
+          <% } %>
+        </div>
+
+        <% if (finalMatch) { %>
+        <div class="match-card-knockout" style="border: 2px solid #ffd700; background: rgba(255, 215, 0, 0.05); padding: 20px;">
+          <div style="width: 40%; text-align: right; font-size: 1.2rem;">
+            <span class="<%= finalMatch.winner && finalMatch.winner._id.toString() === finalMatch.homeTeam._id.toString() ? 'winner-highlight' : '' %>">
+              <%= finalMatch.homeTeam.name %>
+            </span>
+          </div>
+          <div class="score-box" style="font-size: 1.4rem;">
+            <% if (finalMatch.played) { %> 
+              <%= finalMatch.homeScore %> - <%= finalMatch.awayScore %>
+              <% if (finalMatch.penaltyHome !== null) { %>
+                <div style="font-size: 0.8rem;">(Pen: <%= finalMatch.penaltyHome %>-<%= finalMatch.penaltyAway %>)</div>
+              <% } %>
+            <% } else { %> 
+              VS 
+            <% } %>
+          </div>
+          <div style="width: 40%; text-align: left; font-size: 1.2rem;">
+            <span class="<%= finalMatch.winner && finalMatch.winner._id.toString() === finalMatch.awayTeam._id.toString() ? 'winner-highlight' : '' %>">
+              <%= finalMatch.awayTeam.name %>
+            </span>
+          </div>
+        </div>
+
+        <% if (finalMatch.winner) { %>
+        <div style="text-align: center; margin-top: 20px; padding: 20px; background: var(--ucl-card); border-radius: 8px;">
+          <h3 style="color: #ffd700; margin-bottom: 5px;">🎉 Champions League Winner 🎉</h3>
+          <h1 style="font-size: 2rem; margin: 0;"><%= finalMatch.winner.name %></h1>
+        </div>
+        <% } %>
+        <% } %>
+      </div>
+
+      <!-- ELIMINATED TEAMS SECTION -->
+      <div class="knockout-section">
+        <h2 class="section-title" style="color: #dc3545;">
+          ❌ Eliminated Teams (Ranks 25-36)
+        </h2>
+        <div class="grid-teams">
+          <% eliminatedTeams.forEach((team, index) => { %>
+          <div
+            class="team-badge-card"
+            style="border-left: 4px solid #dc3545; opacity: 0.7;"
+          >
+            <div>
+              <strong><%= team.name %></strong>
+              <div style="font-size: 0.8rem; color: var(--ucl-text-muted);">
+                <%= team.points %> Pts
+              </div>
+            </div>
+            <span class="rank" style="background: #331015;"
+              >#<%= index + 25 %></span
+            >
+          </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <% } %>
+    </div>
+  </body>
+</html>

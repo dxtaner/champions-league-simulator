@@ -10,3 +10,20 @@ This is a web-based **Champions League Simulator** application built using **Nod
 *   **Dynamic UI:** Responsive views powered by EJS and styled with custom CSS.
 
 ---
+## 📁 Project Structure
+
+```text
+├── config/             # Database and server configurations
+├── controllers/        # Business logic (e.g., tournamentController.js)
+├── models/             # Database schemas (e.g., Tournament models)
+├── public/css/         # Static stylesheets
+├── routes/             # App routing (e.g., tournamentRoutes.js)
+├── utils/              # Helper utilities (e.g., fixtureGenerator.js)
+├── views/              # EJS templates for rendering the UI
+├── .gitignore          # Git ignore file
+├── package.json        # Project dependencies and scripts
+├── seed.js             # Initial database population script
+└── server.js           # Application entry point
+```
+
+---

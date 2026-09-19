@@ -60,3 +60,9 @@ node server.js
 The application should now be running locally. Open your browser and navigate to `http://localhost:3000` (or the port specified in your config).
 
 ---
+
+## 🧰 Technologies Used
+
+*   **Backend:** Node.js, Express
+*   **Frontend Views:** EJS (Embedded JavaScript templates), CSS
+*   **Architecture:** Model-View-Controller (MVC)

@@ -27,3 +27,36 @@ This is a web-based **Champions League Simulator** application built using **Nod
 ```
 
 ---
+
+---
+
+## 🛠️ Installation & Setup
+
+Follow these steps to run the project locally:
+
+### 1. Clone the Repository
+```bash
+git clone [https://github.com](https://github.com/dxtaner/champions-league-simulator)
+cd champions-league-simulator
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Seed the Database
+Before starting the server, run the seed script to populate your database with initial data:
+```bash
+node seed.js
+```
+
+### 4. Start the Application
+Run the main server file:
+```bash
+node server.js
+```
+
+The application should now be running locally. Open your browser and navigate to `http://localhost:3000` (or the port specified in your config).
+
+---

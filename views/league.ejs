@@ -1,68 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>League Table - UCL Simulator</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <%- include('partials/navbar') %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>League Standings - UCL Simulator</title>
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
 
-  <div class="container">
-    <h1 class="page-title">Swiss System League Table</h1>
+    <div class="ucl-container">
+      <div class="league-header">
+        <h1 class="page-title">League Phase Standings</h1>
+        <form action="/simulate-all" method="POST">
+          <button type="submit" class="btn btn-accent">⚡ Simulate League Phase</button>
+        </form>
+      </div>
 
-    <div class="actions-bar">
-      <form action="/simulate-all" method="POST">
-        <button type="submit" class="btn btn-accent">Simulate Entire Season</button>
-      </form>
-      <form action="/start-season" method="POST">
-        <button type="submit" class="btn">Reset & Start New Season</button>
-      </form>
-    </div>
-
-    <div class="table-container">
-      <table class="league-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Team</th>
-            <th>Country</th>
-            <th>MP</th>
-            <th>W</th>
-            <th>D</th>
-            <th>L</th>
-            <th>GF</th>
-            <th>GA</th>
-            <th>GD</th>
-            <th>Pts</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% teams.forEach((team, index) => { %>
-            <% 
-              let zoneClass = '';
-              if (index < 8) zoneClass = 'zone-direct';
-              else if (index < 24) zoneClass = 'zone-playoff';
-              else zoneClass = 'zone-eliminated';
-            %>
-            <tr class="<%= zoneClass %>">
-              <td><strong><%= index + 1 %></strong></td>
-              <td><strong><%= team.name %></strong></td>
-              <td><%= team.country %></td>
+      <div class="table-wrapper">
+        <table class="ucl-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Team</th>
+              <th>MP</th>
+              <th>W</th>
+              <th>D</th>
+              <th>L</th>
+              <th>GF</th>
+              <th>GA</th>
+              <th>GD</th>
+              <th>Pts</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% teams.forEach((team, index) => { %>
+            <tr class="<%= index < 8 ? 'row-qualified' : index < 24 ? 'row-playoff' : 'row-eliminated' %>">
+              <td class="col-rank"><%= index + 1 %></td>
+              <td class="col-team"><%= team.name %></td>
               <td><%= team.played %></td>
               <td><%= team.wins %></td>
               <td><%= team.draws %></td>
               <td><%= team.losses %></td>
               <td><%= team.goalsFor %></td>
               <td><%= team.goalsAgainst %></td>
-              <td><%= team.goalsFor - team.goalsAgainst %></td>
-              <td><strong><%= team.points %></strong></td>
+              <td class="col-gd"><%= team.goalsFor - team.goalsAgainst %></td>
+              <td class="col-pts"><%= team.points %></td>
             </tr>
-          <% }); %>
-        </tbody>
-      </table>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-</body>
+
+    <%- include('partials/footer') %>
+
+    <style>
+      .league-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .table-wrapper {
+        background-color: var(--ucl-surface);
+        border: 1px solid var(--ucl-card-border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        margin-bottom: 40px;
+      }
+
+      .ucl-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+      }
+
+      .ucl-table th {
+        background-color: var(--ucl-card);
+        color: var(--ucl-text-muted);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 16px;
+        border-bottom: 1px solid var(--ucl-card-border);
+      }
+
+      .ucl-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+        font-size: 0.95rem;
+      }
+
+      .col-rank {
+        font-weight: 800;
+        width: 50px;
+      }
+
+      .col-team {
+        text-align: left;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .col-gd {
+        color: var(--ucl-text-muted);
+      }
+
+      .col-pts {
+        font-weight: 800;
+        color: var(--ucl-accent);
+        font-size: 1.05rem;
+      }
+
+      .row-qualified {
+        border-left: 4px solid var(--ucl-success);
+        background: linear-gradient(90deg, rgba(52, 211, 153, 0.05) 0%, rgba(0,0,0,0) 100%);
+      }
+
+      .row-playoff {
+        border-left: 4px solid var(--ucl-accent);
+        background: linear-gradient(90deg, rgba(0, 242, 255, 0.03) 0%, rgba(0,0,0,0) 100%);
+      }
+
+      .row-eliminated {
+        border-left: 4px solid var(--ucl-danger);
+        opacity: 0.6;
+      }
+    </style>
+  </body>
 </html>

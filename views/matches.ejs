@@ -1,46 +1,196 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Match Fixtures - UCL Simulator</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <%- include('partials/navbar') %>
+<%- include('partials/navbar') %>
 
-  <div class="container">
-    <h1 class="page-title">Matchday <%= currentMatchday %> Fixtures</h1>
+<main class="ucl-container py-4">
+  <div class="ucl-page-header">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+      <div>
+        <h1 class="ucl-title m-0">Matchday <%= currentMatchday %></h1>
+        <p class="text-muted m-0">League Phase / Swiss-System</p>
+      </div>
 
-    <div class="matchday-nav">
-      <% for (let i = 1; i <= 8; i++) { %>
-        <a href="/matches/<%= i %>" class="<%= currentMatchday === i ? 'active' : '' %>">
-          Matchday <%= i %>
-        </a>
-      <% } %>
-    </div>
-
-    <div class="actions-bar">
-      <form action="/matches/simulate/<%= currentMatchday %>" method="POST">
-        <button type="submit" class="btn btn-accent">Simulate Matchday</button>
-      </form>
-    </div>
-
-    <div class="matches-grid">
-      <% matches.forEach(match => { %>
-        <div class="match-card">
-          <div class="team-name home"><%= match.homeTeam ? match.homeTeam.name : 'TBD' %></div>
-          <div class="score-box">
-            <% if (match.played) { %>
-              <%= match.homeScore %> - <%= match.awayScore %>
-            <% } else { %>
-              vs
-            <% } %>
-          </div>
-          <div class="team-name away"><%= match.awayTeam ? match.awayTeam.name : 'TBD' %></div>
-        </div>
-      <% }); %>
+      <div class="ucl-matchday-nav">
+        <% for(let i = 1; i <= 8; i++) { %>
+          <a 
+            href="/matches/<%= i %>" 
+            class="ucl-nav-btn <%= i === currentMatchday ? 'active' : '' %>"
+          >
+            Matchday <%= i %>
+          </a>
+        <% } %>
+      </div>
     </div>
   </div>
-</body>
-</html>
+
+  <div class="ucl-action-bar mb-4">
+    <% const hasUnplayed = matches.some(m => !m.played); %>
+    <form action="/matches/simulate/<%= currentMatchday %>" method="POST" class="m-0">
+      <button 
+        type="submit" 
+        class="ucl-btn-simulate" 
+        <%= !hasUnplayed ? 'disabled' : '' %>
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+        </svg>
+        <%= hasUnplayed ? 'Simulate Matchday' : 'Matchday Completed' %>
+      </button>
+    </form>
+  </div>
+
+  <div class="ucl-matches-grid">
+    <% if (matches && matches.length > 0) { %>
+      <% matches.forEach(match => { %>
+        <div class="ucl-match-card <%= match.played ? 'played' : '' %>">
+          
+          <div class="ucl-team home">
+            <span class="team-name"><%= match.homeTeam ? match.homeTeam.name : 'Unknown' %></span>
+          </div>
+
+          <div class="ucl-score-badge">
+            <% if (match.played) { %>
+              <span class="score"><%= match.homeScore %></span>
+              <span class="divider">-</span>
+              <span class="score"><%= match.awayScore %></span>
+            <% } else { %>
+              <span class="vs">VS</span>
+            <% } %>
+          </div>
+
+          <div class="ucl-team away">
+            <span class="team-name"><%= match.awayTeam ? match.awayTeam.name : 'Unknown' %></span>
+          </div>
+
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="ucl-empty-state">
+        <p>No fixtures found for this matchday.</p>
+      </div>
+    <% } %>
+  </div>
+</main>
+
+<style>
+  .ucl-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ucl-page-header {
+    border-bottom: 1px solid var(--ucl-card-border, #1e293b);
+    padding-bottom: 16px;
+  }
+
+  .ucl-title {
+    color: #ffffff;
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  .ucl-matchday-nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .ucl-nav-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--ucl-card-border, #1e293b);
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .ucl-nav-btn:hover,
+  .ucl-nav-btn.active {
+    background-color: #0056b3;
+    color: #ffffff;
+    border-color: #007bff;
+  }
+
+  .ucl-btn-simulate {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #00d2ff 0%, #0056b3 100%);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .ucl-btn-simulate:hover:not(:disabled) {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+  }
+
+  .ucl-btn-simulate:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #1e293b;
+  }
+
+  .ucl-matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+
+  .ucl-match-card {
+    background-color: var(--ucl-surface, #0f172a);
+    border: 1px solid var(--ucl-card-border, #1e293b);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ucl-team {
+    flex: 1;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #ffffff;
+  }
+
+  .ucl-team.home { text-align: right; }
+  .ucl-team.away { text-align: left; }
+
+  .ucl-score-badge {
+    padding: 6px 14px;
+    margin: 0 12px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--ucl-card-border, #1e293b);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #00d2ff;
+    min-width: 70px;
+    justify-content: center;
+  }
+
+  .ucl-score-badge .vs {
+    color: #64748b;
+    font-size: 0.85rem;
+  }
+
+  .ucl-empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 0;
+    color: #64748b;
+  }
+</style>
+
+<%- include('partials/footer') %>

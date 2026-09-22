@@ -1,8 +1,149 @@
-<nav class="navbar">
-  <a href="/" class="logo">⚽ UCL <span>Simulator</span></a>
-  <ul class="nav-links">
-    <li><a href="/league">League Table</a></li>
-    <li><a href="/matches">Matches</a></li>
-    <li><a href="/knockout">Knockout Stage</a></li>
-  </ul>
+<!-- ==========================================
+     1. views/partials/navbar.ejs
+     ========================================== -->
+<nav class="ucl-navbar">
+  <div class="ucl-container nav-wrapper">
+    <a href="/" class="ucl-logo">
+      <span class="star-icon">★</span> UCL SIMULATOR
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/league">League Table</a></li>
+      <li><a href="/matches">Matches</a></li>
+      <li><a href="/knockout">Knockout Stage</a></li>
+    </ul>
+  </div>
 </nav>
+
+<style>
+  :root {
+    --ucl-bg: #070a12;
+    --ucl-surface: #0f172a;
+    --ucl-card: #1e293b;
+    --ucl-card-border: #334155;
+    --ucl-accent: #00f2ff;
+    --ucl-accent-glow: rgba(0, 242, 255, 0.25);
+    --ucl-text: #f8fafc;
+    --ucl-text-muted: #94a3b8;
+    --ucl-gold: #fbbf24;
+    --ucl-gold-glow: rgba(251, 191, 36, 0.2);
+    --ucl-danger: #f87171;
+    --ucl-success: #34d399;
+  }
+
+  body {
+    background-color: var(--ucl-bg);
+    color: var(--ucl-text);
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ucl-container {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  .ucl-navbar {
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.95) 0%,
+      rgba(15, 23, 42, 0.8) 100%
+    );
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--ucl-card-border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+  }
+
+  .ucl-logo {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 800;
+    text-decoration: none;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .star-icon {
+    color: var(--ucl-accent);
+    text-shadow: 0 0 10px var(--ucl-accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links a {
+    color: var(--ucl-text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--ucl-accent);
+    text-shadow: 0 0 8px var(--ucl-accent-glow);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-accent {
+    background: linear-gradient(135deg, #00f2ff 0%, #0066ff 100%);
+    color: #000;
+    box-shadow: 0 4px 15px var(--ucl-accent-glow);
+  }
+
+  .btn-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 242, 255, 0.4);
+  }
+
+  .page-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 40px 0 24px;
+    background: linear-gradient(90deg, #fff 0%, var(--ucl-text-muted) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>

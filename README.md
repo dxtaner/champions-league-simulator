@@ -2,6 +2,20 @@
 
 This is a web-based **Champions League Simulator** application built using **Node.js**, **Express**, and **EJS** template engine. The project follows the **MVC (Model-View-Controller)** architecture to manage teams, generate tournament fixtures, and simulate matches seamlessly.
 
+---
+
+## 🌐 Live Demo & Deployment
+
+The application is deployed live on **Render** and can be accessed here:
+
+* **Live URL:** [https://champions-league-simulator-dxtaner.onrender.com](https://champions-league-simulator-dxtaner.onrender.com)
+
+### Environment Variables for Deployment
+When deploying to platforms like Render or Railway, make sure to set the following Environment Variables in your dashboard:
+
+* `MONGO_URI`: Your MongoDB Atlas connection string.
+* `PORT`: Dynamically assigned by the hosting provider.
+
 ## 🚀 Features
 
 *   **Automated Fixture Generation:** Dynamically generates tournament fixtures using the custom `fixtureGenerator` utility.

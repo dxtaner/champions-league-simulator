@@ -15,7 +15,21 @@ When deploying to platforms like Render or Railway, make sure to set the followi
 
 * `MONGO_URI`: Your MongoDB Atlas connection string.
 * `PORT`: Dynamically assigned by the hosting provider.
+---
 
+## 📸 Preview & Screenshots
+
+![Champions League Simulator Preview 1](./assets/ChampionsLeagueSim.gif)
+
+![Champions League Simulator Preview 2](./assets/ChampionsLeagueSim2.gif)
+
+![Champions League Simulator Preview 3](./assets/ChampionsLeagueSim3.gif) 
+
+![Champions League Simulator Preview 4](./assets/ChampionsLeagueSim4.gif)
+
+![Champions League Simulator Preview 5](./assets/ChampionsLeagueSim5.gif)
+
+---
 ## 🚀 Features
 
 *   **Automated Fixture Generation:** Dynamically generates tournament fixtures using the custom `fixtureGenerator` utility.
